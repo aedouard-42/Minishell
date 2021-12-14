@@ -30,6 +30,17 @@
 ** ----- Defines ---------------------------------------------------------------
 */
 
+#define STDIN		0
+#define	STDOUT		1
+
+#define READ_END	0
+#define WRITE_END	1
+
+#define NOPIPE		0
+#define FIRST_PIPE	1
+#define MID_PIPE	2
+#define LAST_PIPE	3
+
 /*
 ** ----- Enums -----------------------------------------------------------------
 */
@@ -44,6 +55,13 @@ typedef struct env_str
 	char *value;
 	int export;
 }	t_env_str;
+
+typedef struct command
+{
+	char *cmd_path;
+	char **args;
+	int pipe_type;
+}	t_cmd;
 
 
 /*
@@ -79,6 +97,7 @@ void	ft_free_content(void *content);
 void    ft_sort_export(t_list *lst);
 void	export_to_list(char *str, t_list *export_lst, t_list *env_lst, int export_env);
 void    ft_exit(t_list *lst_env, t_list *lst_export);
+void    exec_tests(t_list **head, char **envp);
 
 
 // -------------------------------------------------------------------------- //

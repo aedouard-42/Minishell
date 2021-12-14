@@ -57,6 +57,14 @@ int	found_in_env(char *str, void *content)
 	}
 }*/
 
+void	exec_print(void *content)
+{
+	t_cmd *cmd = (t_cmd *)content;
+
+	printf("%d\n", cmd->pipe_type);
+
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list *lst_env;
@@ -68,15 +76,23 @@ int	main(int ac, char **av, char **env)
 	lst_env = NULL;
 	lst_export = NULL;
 
-	ft_lst_copyenv(env, &lst_env);
-	ft_lst_copyenv(env, &lst_export);
+	//ft_lst_copyenv(env, &lst_env);
+	//ft_lst_copyenv(env, &lst_export);
 
 
 	char *str;
 	str = NULL;
 	char **args;
+	t_list *exec_head;
 
-	while (1)
+	exec_head = NULL;
+
+
+	exec_tests(&exec_head, env);
+
+	ft_lstiter(exec_head, exec_print);
+
+	/*while (1)
 	{
 		str = readline("minishell ");
 		//printf("%s\n", str);
@@ -97,7 +113,7 @@ int	main(int ac, char **av, char **env)
 			builtin_pwd();
 		if (ft_strncmp(args[0], "$?", 2) == 0)
 			printf("%d\n", errno);
-	}
+	}*/
 
 	//ft_unset(lsthead, av);
 	//ft_lstiter(lsthead, ft_env);
