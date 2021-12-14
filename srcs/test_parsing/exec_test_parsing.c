@@ -39,10 +39,10 @@ void    exec_tests(t_list **head, char **envp)
     cmd1->pipe_type = NOPIPE;
 
     cmd2->args = args2;
-    cmd2->pipe_type = FIRST_PIPE;
+    cmd2->pipe_type = NOPIPE;
 
     cmd3->args = args3;
-    cmd3->pipe_type = LAST_PIPE;
+    cmd3->pipe_type = NOPIPE;
     
     link1 = ft_lstnew(cmd1);
     link2 = ft_lstnew(cmd2);

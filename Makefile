@@ -15,6 +15,7 @@ SRCS = main.c\
 		srcs/builtins/ft_sort_export.c\
 		srcs/builtins/ft_unset.c\
 		srcs/test_parsing/exec_test_parsing.c\
+		srcs/exec/pipes.c
 		
 CC = clang
 

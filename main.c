@@ -61,6 +61,8 @@ void	exec_print(void *content)
 {
 	t_cmd *cmd = (t_cmd *)content;
 
+	printf("%s\n", cmd->args[0]);
+
 	printf("%d\n", cmd->pipe_type);
 
 }
@@ -91,6 +93,8 @@ int	main(int ac, char **av, char **env)
 	exec_tests(&exec_head, env);
 
 	ft_lstiter(exec_head, exec_print);
+
+	//exec_cmds(exec_head, env);
 
 	/*while (1)
 	{

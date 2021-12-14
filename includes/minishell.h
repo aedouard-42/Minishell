@@ -97,7 +97,11 @@ void	ft_free_content(void *content);
 void    ft_sort_export(t_list *lst);
 void	export_to_list(char *str, t_list *export_lst, t_list *env_lst, int export_env);
 void    ft_exit(t_list *lst_env, t_list *lst_export);
+
+
+
 void    exec_tests(t_list **head, char **envp);
+int exec_cmds(t_list *lst_cmd, char **envp);
 
 
 // -------------------------------------------------------------------------- //

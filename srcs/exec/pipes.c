@@ -12,13 +12,18 @@ int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
     {
         if (type == NOPIPE)
         {
-            execve(content->cmd_path, content->args, envp);
+            printf("%s\n", content->args[0]);
+
+            execve(content->args[0], content->args, envp);
+
+            exit(1);
         }
     }
     else
     {
 
     }
+    return (1);
 }
 
 int exec_cmds(t_list *lst_cmd, char **envp)
