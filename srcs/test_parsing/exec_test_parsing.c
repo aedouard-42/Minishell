@@ -19,16 +19,16 @@ void    exec_tests(t_list **head, char **envp)
     args3 = malloc(sizeof(char *) * 3);
 
     args1[0] = ft_strdup("/usr/bin/cat");
-    args1[1] = ft_strdup("main.c");
+    args1[1] = ft_strdup("toto.c");
     args1[2] = NULL;
 
 
-    args2[0] = ft_strdup("usr/bin/ls");
-    args2[1] = ft_strdup("-la");
+    args2[0] = ft_strdup("/usr/bin/cat");
+    args2[1] = ft_strdup("toto.c");
     args2[2] = NULL;
 
-    args3[0] = ft_strdup("usr/bin/pwd");
-    args3[1] = ft_strdup("");
+    args3[0] = ft_strdup("/usr/bin/cat");
+    args3[1] = ft_strdup("toto.c");
     args3[2] = NULL;
 
     cmd1 = malloc(sizeof(t_cmd));
