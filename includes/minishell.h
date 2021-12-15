@@ -30,9 +30,6 @@
 ** ----- Defines ---------------------------------------------------------------
 */
 
-#define STDIN		0
-#define	STDOUT		1
-
 #define READ_END	0
 #define WRITE_END	1
 
@@ -58,9 +55,9 @@ typedef struct env_str
 
 typedef struct command
 {
-	char *cmd_path;
 	char **args;
 	int pipe_type;
+	
 }	t_cmd;
 
 

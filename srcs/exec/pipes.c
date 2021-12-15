@@ -20,6 +20,7 @@ int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
         else if (type == FIRST_PIPE)
         {
             printf("%s\n", content->args[0]);
+            //close(fd[i * 2]);
             dup2(fd[(i * 2) + 1], STDOUT_FILENO);
             execve(content->args[0], content->args, envp);
             printf("execve failed for test : %s\n", content->args[0]);
@@ -37,6 +38,7 @@ int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
         else if (type == LAST_PIPE)
         {
             printf("%s\n", content->args[0]);
+            //close(fd[i * 2 + 1]);
             dup2(fd[(i  - 1) * 2], STDIN_FILENO);
             execve(content->args[0], content->args, envp);
             printf("execve failed for test : %s\n", content->args[0]);

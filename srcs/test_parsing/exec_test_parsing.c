@@ -26,13 +26,12 @@ void    exec_tests(t_list **head, char **envp)
     args1[1] = ft_strdup("toto.c");
     args1[2] = NULL;
 
-
     args2[0] = ft_strdup("/usr/bin/cat");
     args2[1] = ft_strdup("-e");
     args2[2] = NULL;
 
-    args3[0] = ft_strdup("/usr/bin/cat");
-    args3[1] = ft_strdup("-e");
+    args3[0] = ft_strdup("/usr/bin/grep");
+    args3[1] = ft_strdup("bonjour");
     args3[2] = NULL;
 
     args4[0] = ft_strdup("/usr/bin/cat");

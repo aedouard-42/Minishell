@@ -31,6 +31,22 @@ void	ft_free_content(void *content)
 	free(content2);
 }
 
+void	ft_free_cmds(void *content)
+{
+	t_cmd *content2 = (t_cmd *)content;
+
+	int i = 0;
+
+	while(content2->args[i])
+	{
+		free(content2->args[i]);
+		i++;
+	}
+	free(content2->args);
+
+	free(content2);
+}
+
 int	found_in_env(char *str, void *content)
 {
 	t_env_str *content2 = (t_env_str *)content;
@@ -57,7 +73,7 @@ int	found_in_env(char *str, void *content)
 	}
 }*/
 
-void	exec_print(void *content)
+void	*exec_print(void *content)
 {
 	t_cmd *cmd = (t_cmd *)content;
 
@@ -92,7 +108,7 @@ int	main(int ac, char **av, char **env)
 
 	exec_tests(&exec_head, env);
 
-	ft_lstiter(exec_head, exec_print);
+	ft_lstiter(exec_head, &exec_print);
 
 	exec_cmds(exec_head, env);
 
@@ -129,6 +145,8 @@ int	main(int ac, char **av, char **env)
 
 
 	//ft_cd(av, lst_env, lst_export);
+
+	ft_lstclear(&exec_head, &ft_free_cmds);
 
 	return (0);
 }
