@@ -66,6 +66,7 @@ int exec_cmds(t_list *lst_cmd, char **envp)
     int size_lst;
 
     size_lst = ft_lstsize(lst_cmd);
+    //printf("lst size : %d\n", size_lst);
 
     fd = malloc(sizeof((*fd) * 2 * size_lst));
     i = 0;
@@ -75,4 +76,5 @@ int exec_cmds(t_list *lst_cmd, char **envp)
         i++;
         lst_cmd = lst_cmd->next;
     }
+    free(fd);
 }
