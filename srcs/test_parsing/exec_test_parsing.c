@@ -23,12 +23,12 @@ void    exec_tests(t_list **head, char **envp)
     args1[2] = NULL;
 
 
-    args2[0] = ft_strdup("/usr/bin/cat");
-    args2[1] = ft_strdup("toto.c");
+    args2[0] = ft_strdup("/usr/bin/grep");
+    args2[1] = ft_strdup("bonjour");
     args2[2] = NULL;
 
-    args3[0] = ft_strdup("/usr/bin/cat");
-    args3[1] = ft_strdup("toto.c");
+    args3[0] = ft_strdup("/usr/bin/wc");
+    args3[1] = ft_strdup("-l");
     args3[2] = NULL;
 
     cmd1 = malloc(sizeof(t_cmd));
@@ -36,13 +36,13 @@ void    exec_tests(t_list **head, char **envp)
     cmd3 = malloc(sizeof(t_cmd));
 
     cmd1->args = args1;
-    cmd1->pipe_type = NOPIPE;
+    cmd1->pipe_type = FIRST_PIPE;
 
     cmd2->args = args2;
-    cmd2->pipe_type = NOPIPE;
+    cmd2->pipe_type = MID_PIPE;
 
     cmd3->args = args3;
-    cmd3->pipe_type = NOPIPE;
+    cmd3->pipe_type = LAST_PIPE;
     
     link1 = ft_lstnew(cmd1);
     link2 = ft_lstnew(cmd2);

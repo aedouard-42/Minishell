@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **env)
 
 	exec_tests(&exec_head, env);
 
-	ft_lstiter(exec_head, exec_print);
+	//ft_lstiter(exec_head, exec_print);
 
 	exec_cmds(exec_head, env);
 
