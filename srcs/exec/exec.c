@@ -1,17 +1,5 @@
 #include "../../includes/minishell.h"
 
-pipe_first(t_cmd *cmd)
-{
-	//cmd->fd[1] = dup(STDOUT_FILENO);
-    dup2(cmd->fd[1], STDOUT_FILENO);
-}
-
-pipe_last(t_cmd *cmd , t_cmd *prev)
-{
-    dup2(prev->fd[0], STDIN_FILENO);
-    dup2(STDOUT_FILENO, prev->fd[1]);
-}
-
 int pipe_cmd(t_cmd *cmd, t_cmd *prev_cmd, t_cmd *next_cmd)
 {
     int type;
@@ -31,11 +19,6 @@ int pipe_cmd(t_cmd *cmd, t_cmd *prev_cmd, t_cmd *next_cmd)
 		perror("last pipe");
 
 	return (1);
-}
-
-int redir_cmd()
-{
-
 }
 
 int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
@@ -59,10 +42,9 @@ int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
         waitpid(pid, &status, 0);
         close(cmd->fd[1]);
         if (prev && prev->type  == PIPE)
-		{
 			close(prev->fd[0]);
-		}
     }
+    return (1);
 }
 
 int exec_cmd(t_cmd *cmd, t_cmd *prev_cmd, t_cmd *next_cmd, char **envp)
@@ -70,8 +52,8 @@ int exec_cmd(t_cmd *cmd, t_cmd *prev_cmd, t_cmd *next_cmd, char **envp)
     pid_t pid;
     int status;
 
-    pipe_cmd(cmd, prev_cmd, next_cmd);
-    redir_cmd();
+    //pipe_cmd(cmd, prev_cmd, next_cmd);
+    pipe(cmd->fd);
     execute_cmd(cmd, prev_cmd, next_cmd, envp);
     return (1);
 }
@@ -88,10 +70,11 @@ int exec_cmds(t_list *lst, char **envp)
     while (lst)
     {
         cmd = lst->content;
-        next = lst->next;
+        next = (t_cmd *)lst->next;
         exec_cmd(cmd, prev, next, envp);
 		prev = lst->content;
         lst = lst->next;
     }
+    return (1);
 }
 
