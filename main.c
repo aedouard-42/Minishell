@@ -73,13 +73,13 @@ int	found_in_env(char *str, void *content)
 	}
 }*/
 
-void	*exec_print(void *content)
+void	exec_print(void *content)
 {
 	t_cmd *cmd = (t_cmd *)content;
 
 	printf("%s\n", cmd->args[0]);
 
-	printf("%d\n", cmd->pipe_type);
+	//printf("%d\n", cmd->type);
 
 }
 
@@ -101,7 +101,7 @@ int	main(int ac, char **av, char **env)
 	char *str;
 	str = NULL;
 	char **args;
-	t_list *exec_head;
+	t_cmd *exec_head;
 
 	exec_head = NULL;
 

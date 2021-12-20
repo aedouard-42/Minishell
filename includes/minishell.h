@@ -37,6 +37,7 @@
 #define FIRST_PIPE	1
 #define MID_PIPE	2
 #define LAST_PIPE	3
+#define	PIPE		4
 
 /*
 ** ----- Enums -----------------------------------------------------------------
@@ -53,11 +54,26 @@ typedef struct env_str
 	int export;
 }	t_env_str;
 
-typedef struct command
+/*typedef struct command
 {
 	char **args;
 	int pipe_type;
 	
+}	t_cmd;*/
+
+typedef struct redir
+{
+    int 			type; // > ou >> ou <
+    char 			*filename;
+    struct redir	*next;
+}	t_redir;
+
+typedef struct command
+{
+    char				**args;
+    int                type; //PIPE ou NORMAL
+    int                fd[2];
+    struct redir    *redir; //NULL si non redir
 }	t_cmd;
 
 
@@ -98,7 +114,7 @@ void    ft_exit(t_list *lst_env, t_list *lst_export);
 
 
 void    exec_tests(t_list **head, char **envp);
-int exec_cmds(t_list *lst_cmd, char **envp);
+int     exec_cmds(t_list *lst, char **envp);
 
 
 // -------------------------------------------------------------------------- //

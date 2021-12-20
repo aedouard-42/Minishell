@@ -1,11 +1,13 @@
 #include "../../includes/minishell.h"
 
-int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
+/*int exec_cmd(t_cmd *content, int **fdd, int i, int size_lst, char **envp)
 {
     pid_t pid;
     int type = content->pipe_type;
     int status;
+    int     *fd = *fdd;
 
+    printf("|%d|\n", i * 2);
     pipe(&fd[i * 2]);
     pid = fork();
     if (pid == 0)
@@ -20,7 +22,7 @@ int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
         else if (type == FIRST_PIPE)
         {
             printf("%s\n", content->args[0]);
-            //close(fd[i * 2]);
+            close(fd[i * 2]);
             dup2(fd[(i * 2) + 1], STDOUT_FILENO);
             execve(content->args[0], content->args, envp);
             printf("execve failed for test : %s\n", content->args[0]);
@@ -38,7 +40,7 @@ int exec_cmd(t_cmd *content, int *fd, int i, int size_lst, char **envp)
         else if (type == LAST_PIPE)
         {
             printf("%s\n", content->args[0]);
-            //close(fd[i * 2 + 1]);
+            close(fd[i * 2 + 1]);
             dup2(fd[(i  - 1) * 2], STDIN_FILENO);
             execve(content->args[0], content->args, envp);
             printf("execve failed for test : %s\n", content->args[0]);
@@ -68,15 +70,15 @@ int exec_cmds(t_list *lst_cmd, char **envp)
     int size_lst;
 
     size_lst = ft_lstsize(lst_cmd);
-    //printf("lst size : %d\n", size_lst);
+    printf("malloc size : %d\n", 2 * size_lst);
 
     fd = malloc(sizeof((*fd) * 2 * size_lst));
     i = 0;
     while (lst_cmd)
     {
-        exec_cmd(lst_cmd->content, fd, i, size_lst, envp);
+        exec_cmd(lst_cmd->content, &fd, i, size_lst, envp);
         i++;
         lst_cmd = lst_cmd->next;
     }
     free(fd);
-}
+}*/
