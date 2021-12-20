@@ -1,5 +1,10 @@
 #include "../../includes/minishell.h"
 
+int redirect(t_cmd * cmd)
+{
+    
+}
+
 int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
 {
 	pid_t pid;
@@ -9,6 +14,7 @@ int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
         dup2(cmd->fd[1], STDOUT_FILENO);
     if (prev != NULL)
         dup2(prev->fd[0], STDIN_FILENO);
+    redirect(cmd);
     execve(cmd->args[0], cmd->args, envp);
     printf("execve failed for test : %s\n", cmd->args[0]);
     exit(1);
