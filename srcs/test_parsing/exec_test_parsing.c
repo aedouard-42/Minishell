@@ -17,28 +17,6 @@ void    exec_tests(t_list **head, char **envp)
     char **args3;
     char **args4;
 
-    int *fd1;
-    int *fd2;
-    int *fd3;
-    int *fd4;
-
-    fd1 = malloc(sizeof(int) * 2);
-    fd2 = malloc(sizeof(int) * 2);
-    fd3 = malloc(sizeof(int) * 2);
-    fd4 = malloc(sizeof(int) * 2);
-
-    fd1[0] = STDIN_FILENO;
-    fd1[1] = STDOUT_FILENO;
-
-    fd2[0] = STDIN_FILENO;
-    fd2[1] = STDOUT_FILENO;
-
-    fd3[0] = STDIN_FILENO;
-    fd3[1] = STDOUT_FILENO;
-
-    fd4[0] = STDIN_FILENO;
-    fd4[1] = STDOUT_FILENO;
-
     args1 = malloc(sizeof(char *) * 3);
     args2 = malloc(sizeof(char *) * 3);
     args3 = malloc(sizeof(char *) * 3);
@@ -85,6 +63,6 @@ void    exec_tests(t_list **head, char **envp)
 
     ft_lstadd_back(head, link1);
     ft_lstadd_back(head, link2);
-    //ft_lstadd_back(head, link3);
-    //ft_lstadd_back(head, link4);
+    ft_lstadd_back(head, link3);
+    ft_lstadd_back(head, link4);
 }

@@ -42,14 +42,7 @@ int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
 {
 	pid_t pid;
 	int status;
-	int type;
-	int prev_type;
 
-	type = cmd->type;
-	if (prev != NULL)
-		prev_type = prev->type;
-	else
-		prev_type = NOPIPE;
 	pid = fork();
 	if (pid == 0)
     {
@@ -65,9 +58,8 @@ int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
     {
         waitpid(pid, &status, 0);
         close(cmd->fd[1]);
-        if (prev_type == PIPE)
+        if (prev && prev->type  == PIPE)
 		{
-			
 			close(prev->fd[0]);
 		}
     }
@@ -75,66 +67,12 @@ int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)
 
 int exec_cmd(t_cmd *cmd, t_cmd *prev_cmd, t_cmd *next_cmd, char **envp)
 {
-
-    
     pid_t pid;
     int status;
 
     pipe_cmd(cmd, prev_cmd, next_cmd);
     redir_cmd();
     execute_cmd(cmd, prev_cmd, next_cmd, envp);
-    //open(STDOUT_FILENO, O_RDONLY);
-
-    /*if (pid == 0)
-    {
-        if (type == NOPIPE)
-        {
-            printf("%s\n", content->args[0]);
-            execve(content->args[0], content->args, envp);
-            printf("execve failed for test : %s\n", content->args[0]);
-            exit(1);
-        }
-        else if (type == FIRST_PIPE)
-        {
-            printf("%s\n", content->args[0]);
-            close(fd[i * 2]);
-            dup2(fd[(i * 2) + 1], STDOUT_FILENO);
-            execve(content->args[0], content->args, envp);
-            printf("execve failed for test : %s\n", content->args[0]);
-            exit(1);
-        }
-        else if (type == MID_PIPE)
-        {
-            printf("%s\n", content->args[0]);
-            dup2(fd[(i * 2) + 1], STDOUT_FILENO);
-            dup2(fd[((i - 1) * 2)], STDIN_FILENO);
-            execve(content->args[0], content->args, envp);
-            printf("execve failed for test : %s\n", content->args[0]);
-            exit(1);
-        }
-        else if (type == LAST_PIPE)
-        {
-            printf("%s\n", content->args[0]);
-            close(fd[i * 2 + 1]);
-            dup2(fd[(i  - 1) * 2], STDIN_FILENO);
-            execve(content->args[0], content->args, envp);
-            printf("execve failed for test : %s\n", content->args[0]);
-            exit(1);
-        }
-    }
-    else
-    {
-        waitpid(pid, &status, 0);
-        if (type == FIRST_PIPE)
-            close(fd[(i * 2) + 1]);
-        else if (type == LAST_PIPE)
-            close(fd[(i - 1) * 2]);
-        else if (type == MID_PIPE)
-        {
-            close(fd[i * 2 + 1]);
-            close(fd[(i - 1) * 2]);
-        }
-    }*/
     return (1);
 }
 
