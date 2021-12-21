@@ -2,7 +2,33 @@
 
 int redirect(t_cmd * cmd)
 {
-    
+    t_redir *redir;
+    int fd_out;
+    int fd_in;
+
+    redir = cmd->redir;
+    if (cmd->redir == NULL)
+        return (1);
+    while (redir)
+    {
+        if (redir->type == REDIR_OUT)
+        {
+            fd_out = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+            dup2(fd_out, STDOUT_FILENO);
+        }
+        if (redir->type == REDIR_IN)
+        {
+            fd_in = open(redir->filename, O_RDWR , S_IRWXU);
+            if (fd_in == -1)
+            {
+                perror("error");
+                return (-1);
+            }
+            dup2(fd_in, STDIN_FILENO);
+        }
+        redir = redir->next;
+    }
+    return (1);
 }
 
 int execute_cmd(t_cmd *cmd,t_cmd *prev, t_cmd *next, char **envp)

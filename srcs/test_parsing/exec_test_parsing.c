@@ -12,6 +12,29 @@ void    exec_tests(t_list **head, char **envp)
     t_list *link3;
     t_list *link4;
 
+    t_redir *redir1;
+    t_redir *redir2;
+    t_redir *redir3;
+    t_redir *redir4;
+
+    redir1 = malloc(sizeof(t_redir));
+    redir2 = malloc(sizeof(t_redir));
+    redir3 = malloc(sizeof(t_redir));
+    redir4 = malloc(sizeof(t_redir));
+
+    redir1->type = REDIR_IN;
+    redir1->filename = ft_strdup("redirf1.test");
+    redir1->next = NULL;
+
+    redir2->type = REDIR_OUT;
+    redir2->filename = ft_strdup("redir2.test");
+    redir2->next = redir3;
+
+    redir3->type = REDIR_OUT;
+    redir3->filename = ft_strdup("redir3.test");
+    redir3->next = NULL;
+
+
     char **args1;
     char **args2;
     char **args3;
@@ -23,7 +46,7 @@ void    exec_tests(t_list **head, char **envp)
     args4 = malloc(sizeof(char *) * 3);
 
     args1[0] = ft_strdup("/usr/bin/cat");
-    args1[1] = ft_strdup("toto.c");
+    args1[1] = NULL;
     args1[2] = NULL;
 
     args2[0] = ft_strdup("/usr/bin/cat");
@@ -46,15 +69,19 @@ void    exec_tests(t_list **head, char **envp)
 
     cmd1->args = args1;
     cmd1->type = PIPE;
+    cmd1->redir = redir1;
 
     cmd2->args = args2;
     cmd2->type = PIPE;
+    cmd2->redir = NULL;
 
     cmd3->args = args3;
     cmd3->type = PIPE;
+    cmd3->redir = NULL;
 
     cmd4->args = args4;
     cmd4->type = PIPE;
+    cmd4->redir = NULL;
     
     link1 = ft_lstnew(cmd1);
     link2 = ft_lstnew(cmd2);
@@ -63,6 +90,6 @@ void    exec_tests(t_list **head, char **envp)
 
     ft_lstadd_back(head, link1);
     ft_lstadd_back(head, link2);
-    ft_lstadd_back(head, link3);
-    ft_lstadd_back(head, link4);
+    //ft_lstadd_back(head, link3);
+    //ft_lstadd_back(head, link4);
 }

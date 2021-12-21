@@ -38,6 +38,10 @@
 #define MID_PIPE	2
 #define LAST_PIPE	3
 #define	PIPE		4
+#define REDIR_IN 0
+#define REDIR_OUT  1
+#define REDIR_IN2 2
+#define REDIR_OUT2  3
 
 /*
 ** ----- Enums -----------------------------------------------------------------
