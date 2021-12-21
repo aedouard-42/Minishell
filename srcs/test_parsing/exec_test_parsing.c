@@ -22,8 +22,8 @@ void    exec_tests(t_list **head, char **envp)
     redir3 = malloc(sizeof(t_redir));
     redir4 = malloc(sizeof(t_redir));
 
-    redir1->type = REDIR_IN;
-    redir1->filename = ft_strdup("redirf1.test");
+    redir1->type = REDIR_OUT2;
+    redir1->filename = ft_strdup("redir1.test");
     redir1->next = NULL;
 
     redir2->type = REDIR_OUT;
@@ -46,15 +46,15 @@ void    exec_tests(t_list **head, char **envp)
     args4 = malloc(sizeof(char *) * 3);
 
     args1[0] = ft_strdup("/usr/bin/cat");
-    args1[1] = NULL;
+    args1[1] = ft_strdup("toto.c");
     args1[2] = NULL;
 
     args2[0] = ft_strdup("/usr/bin/cat");
     args2[1] = ft_strdup("-e");
     args2[2] = NULL;
 
-    args3[0] = ft_strdup("/usr/bin/grep");
-    args3[1] = ft_strdup("bonjour");
+    args3[0] = ft_strdup("/usr/bin/cat");
+    args3[1] = ft_strdup("-e");
     args3[2] = NULL;
 
     args4[0] = ft_strdup("/usr/bin/cat");
@@ -90,6 +90,6 @@ void    exec_tests(t_list **head, char **envp)
 
     ft_lstadd_back(head, link1);
     ft_lstadd_back(head, link2);
-    //ft_lstadd_back(head, link3);
-    //ft_lstadd_back(head, link4);
+    ft_lstadd_back(head, link3);
+    ft_lstadd_back(head, link4);
 }

@@ -16,15 +16,26 @@ int redirect(t_cmd * cmd)
             fd_out = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
             dup2(fd_out, STDOUT_FILENO);
         }
-        if (redir->type == REDIR_IN)
+        else if (redir->type == REDIR_IN)
         {
             fd_in = open(redir->filename, O_RDWR , S_IRWXU);
             if (fd_in == -1)
             {
-                perror("error");
-                return (-1);
+                perror("Minishell");
+                // need to free something? maybe close fds
+                exit(0);
             }
+        
             dup2(fd_in, STDIN_FILENO);
+        }
+        else if (redir ->type == REDIR_OUT2)
+        {
+            fd_out = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
+            dup2(fd_out, STDOUT_FILENO);
+        }
+        else if (redir->type == REDIR_IN2)
+        {
+
         }
         redir = redir->next;
     }
