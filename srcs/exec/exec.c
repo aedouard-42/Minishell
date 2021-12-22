@@ -5,6 +5,12 @@ int redirect(t_cmd * cmd)
     t_redir *redir;
     int fd_out;
     int fd_in;
+    char *str;
+    int str_size;
+    int ret;
+    int n = 0;
+
+    str = NULL;
 
     redir = cmd->redir;
     if (cmd->redir == NULL)
@@ -25,7 +31,6 @@ int redirect(t_cmd * cmd)
                 // need to free something? maybe close fds
                 exit(0);
             }
-        
             dup2(fd_in, STDIN_FILENO);
         }
         else if (redir ->type == REDIR_OUT2)
@@ -35,7 +40,26 @@ int redirect(t_cmd * cmd)
         }
         else if (redir->type == REDIR_IN2)
         {
+            ret = 1;
+            fd_in = open("tmp_heredoc", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
 
+            while (ret)
+            {
+                str = readline(">");
+                n = ft_strlen(str);
+                if (ft_strlen(cmd->redir->filename) > n)
+                    n = ft_strlen(cmd->redir->filename);
+                ret = ft_strncmp(cmd->redir->filename, str, n);
+                if (ret != 0)
+                {
+                    write(fd_in, str, ft_strlen(str));
+                    fd_in = open("tmp_heredoc", O_RDWR | O_APPEND, S_IRWXU);
+                    write(fd_in, "\n", 1);
+                    fd_in = open("tmp_heredoc", O_RDWR | O_APPEND, S_IRWXU);
+                }
+            }
+            dup2(fd_in, STDIN_FILENO);
+            unlink("tmp_heredoc");
         }
         redir = redir->next;
     }
