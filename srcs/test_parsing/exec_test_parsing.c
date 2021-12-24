@@ -22,8 +22,8 @@ void    exec_tests(t_list **head, char **envp)
     redir3 = malloc(sizeof(t_redir));
     redir4 = malloc(sizeof(t_redir));
 
-    redir1->type = REDIR_OUT2;
-    redir1->filename = ft_strdup("redir1.test");
+    redir1->type = REDIR_IN2;
+    redir1->filename = ft_strdup("END");
     redir1->next = NULL;
 
     redir2->type = REDIR_IN;
@@ -45,7 +45,7 @@ void    exec_tests(t_list **head, char **envp)
     args4 = malloc(sizeof(char *) * 3);
 
     args1[0] = ft_strdup("/bin/cat");
-    args1[1] = ft_strdup("toto.c");
+    args1[1] = ft_strdup("-e");
     args1[2] = NULL;
 
     args2[0] = ft_strdup("bin/cat");
