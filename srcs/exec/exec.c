@@ -1,5 +1,56 @@
 #include "../../includes/minishell.h"
 
+int redir_out(t_redir *redir, int *fd_out)
+{
+    *fd_out = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+    dup2(*fd_out, STDOUT_FILENO);
+    return (0);
+}
+
+int redir_in(t_redir *redir, int *fd_in)
+{
+    *fd_in = open(redir->filename, O_RDWR , S_IRWXU);
+    if (*fd_in == -1)
+    {
+        perror(redir->filename);
+        exit(0);
+    }
+    dup2(*fd_in, STDIN_FILENO);
+    return (0);
+}
+
+int redir_append(t_redir *redir, int *fd_out)
+{
+    *fd_out = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
+    dup2(*fd_out, STDOUT_FILENO);
+    return (0);
+}
+
+int redir_heredoc(t_redir *redir, int *fd_in)
+{
+    int ret;
+    char *str;
+    int n;
+
+    ret = 1;
+    *fd_in = open("tmp_heredoc", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
+    while (ret)
+    {
+        str = readline(">");
+        n = ft_strlen(str);
+        if (ft_strlen(redir->filename) > n)
+            n = ft_strlen(redir->filename);
+        ret = ft_strncmp(redir->filename, str, n);
+        if (ret != 0)
+        {
+            write(fd_in, ft_strjoin(str, "\n"), ft_strlen(str) + 1);
+            fd_in = open("tmp_heredoc", O_RDWR | O_APPEND, S_IRWXU);
+        }
+    }
+    dup2(fd_in, STDIN_FILENO);
+    unlink("tmp_heredoc");
+}
+
 int redirect(t_cmd * cmd)
 {
     t_redir *redir;
@@ -18,28 +69,14 @@ int redirect(t_cmd * cmd)
     while (redir)
     {
         if (redir->type == REDIR_OUT)
-        {
-            fd_out = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
-            dup2(fd_out, STDOUT_FILENO);
-        }
+            redir_out(redir, &fd_out);
         else if (redir->type == REDIR_IN)
-        {
-            fd_in = open(redir->filename, O_RDWR , S_IRWXU);
-            if (fd_in == -1)
-            {
-                perror("Minishell");
-                // need to free something? maybe close fds
-                exit(0);
-            }
-            dup2(fd_in, STDIN_FILENO);
-        }
+            redir_in(redir, &fd_in);
         else if (redir ->type == REDIR_OUT2)
-        {
-            fd_out = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
-            dup2(fd_out, STDOUT_FILENO);
-        }
+            redir_append(redir, &fd_out);
         else if (redir->type == REDIR_IN2)
-        {
+            redir_heredoc(redir, &fd_in);
+        /*{
             ret = 1;
             fd_in = open("tmp_heredoc", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
 
@@ -52,15 +89,13 @@ int redirect(t_cmd * cmd)
                 ret = ft_strncmp(cmd->redir->filename, str, n);
                 if (ret != 0)
                 {
-                    write(fd_in, str, ft_strlen(str));
-                    fd_in = open("tmp_heredoc", O_RDWR | O_APPEND, S_IRWXU);
-                    write(fd_in, "\n", 1);
+                    write(fd_in, ft_strjoin(str, "\n"), ft_strlen(str) + 1);
                     fd_in = open("tmp_heredoc", O_RDWR | O_APPEND, S_IRWXU);
                 }
             }
             dup2(fd_in, STDIN_FILENO);
             unlink("tmp_heredoc");
-        }
+        }*/
         redir = redir->next;
     }
     return (1);
