@@ -4,6 +4,7 @@ int redir_out(t_redir *redir, int *fd_out)
 {
     *fd_out = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
     dup2(*fd_out, STDOUT_FILENO);
+    close(*fd_out);
     return (0);
 }
 
@@ -13,9 +14,11 @@ int redir_in(t_redir *redir, int *fd_in)
     if (*fd_in == -1)
     {
         perror(redir->filename);
+        close(*fd_in);
         exit(0);
     }
     dup2(*fd_in, STDIN_FILENO);
+    close(*fd_in);
     return (0);
 }
 
@@ -23,6 +26,7 @@ int redir_append(t_redir *redir, int *fd_out)
 {
     *fd_out = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
     dup2(*fd_out, STDOUT_FILENO);
+    close(*fd_out);
     return (0);
 }
 
@@ -108,6 +112,8 @@ int exec_cmd(t_cmd *cmd, t_cmd *prev, t_cmd *next_cmd, char **envp)
         close(cmd->fd[1]);
         if (prev && prev->type  == PIPE)
 			close(prev->fd[0]);
+        if (!next_cmd)
+            close (cmd->fd[0]);
     }
     return (1);
 }

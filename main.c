@@ -47,19 +47,7 @@ void	ft_free_cmds(void *content)
 	free(content2);
 }
 
-int	found_in_env(char *str, void *content)
-{
-	t_env_str *content2 = (t_env_str *)content;
-	size_t len;
 
-	len = ft_strlen(content2->name);
-	if (ft_strlen(str) == len)
-	{
-		if (ft_strncmp(content2->name, str, len) == 0)
-			return (1);
-	}
-	return (0);
-}
 
 /*void print_env(char **env)
 {
@@ -95,7 +83,9 @@ int	main(int ac, char **av, char **env)
 	lst_env = NULL;
 	lst_export = NULL;
 
-	//ft_lst_copyenv(env, &lst_env);
+	ft_lst_copyenv(env, &lst_env);
+	char *result = ft_search_value(lst_env, "HOME");
+	printf("%s\n", result);
 	//ft_lst_copyenv(env, &lst_export);
 
 
@@ -112,6 +102,7 @@ int	main(int ac, char **av, char **env)
 	ft_lstiter(exec_head, &exec_print);
 
 	exec_cmds(exec_head, env);
+
 
 	/*while (1)
 	{

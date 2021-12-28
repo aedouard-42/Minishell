@@ -26,7 +26,7 @@ void    exec_tests(t_list **head, char **envp)
     redir1->filename = ft_strdup("END");
     redir1->next = NULL;
 
-    redir2->type = REDIR_IN;
+    redir2->type = REDIR_OUT;
     redir2->filename = ft_strdup("redir2.test");
     redir2->next = NULL;
 
@@ -44,11 +44,11 @@ void    exec_tests(t_list **head, char **envp)
     args3 = malloc(sizeof(char *) * 3);
     args4 = malloc(sizeof(char *) * 3);
 
-    args1[0] = ft_strdup("/bin/cat");
+    args1[0] = ft_strdup("/usr/bin/cat");
     args1[1] = ft_strdup("-e");
     args1[2] = NULL;
 
-    args2[0] = ft_strdup("bin/cat");
+    args2[0] = ft_strdup("/usr/bin/cat");
     args2[1] = ft_strdup("-e");
     args2[2] = NULL;
 
@@ -66,7 +66,7 @@ void    exec_tests(t_list **head, char **envp)
     cmd4 = malloc(sizeof(t_cmd));
 
     cmd1->args = args1;
-    cmd1->type = NOPIPE;
+    cmd1->type = PIPE;
     cmd1->redir = redir1;
 
     cmd2->args = args2;
