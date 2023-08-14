@@ -48,21 +48,14 @@ SRCS = ft_free_strs.c\
 		ft_lstiter.c\
 		ft_lstmap.c\
 
-BONUS_SRCS = 
-
-GNL_SRCS = GNL/get_next_line.c GNL/get_next_line_utils.c
 
 OBJS = ${SRCS:.c=.o}
-
-GNL_OBJS = ${GNL_SRCS:.c=.o}
-
-BOBJS =${BONUS_SRCS:.c=.o}
 
 NAME = libft.a
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -Iincludes -g3
+CFLAGS = -Wall -Wextra -Werror 
 
 .c.o :
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

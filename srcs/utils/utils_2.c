@@ -1,33 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lnelson <lnelson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/08 16:26:40 by aedouard          #+#    #+#             */
-/*   Updated: 2022/01/10 15:52:48 by lnelson          ###   ########.fr       */
+/*   Created: 2022/01/10 15:35:25 by lnelson           #+#    #+#             */
+/*   Updated: 2022/01/10 21:29:26 by lnelson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(void *content)
+int	ft_max(int n, int n2)
 {
-	t_env_str	*content2;
-
-	content2 = (t_env_str *)content;
-	if (content2->env_display == 1)
-	{
-		if ((content2->value != NULL) && content2->value[0] != '\0')
-			printf("%s=%s\n", content2->name, content2->value);
-		else
-			printf("%s\n", content2->name);
-	}
+	if (n > n2)
+		return (n);
+	else
+		return (n2);
 }
 
-void	builtin_env(t_list *lst_env)
+int	is_only_whitespace(char *str)
 {
-	ft_lstiter(lst_env, print_env);
-	g_exit_status = 0;
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_is_space(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	exit_str(int i, char *str)
+{
+	ft_putstr_fd(str, 2);
+	exit (i);
+}
+
+int	line_contain_chars(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] > 32)
+			return (1);
+		i++;
+	}
+	return (0);
 }

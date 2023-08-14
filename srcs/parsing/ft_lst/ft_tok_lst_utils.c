@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_tok_lst_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lnelson <lnelson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/08 16:26:40 by aedouard          #+#    #+#             */
-/*   Updated: 2022/01/10 15:52:48 by lnelson          ###   ########.fr       */
+/*   Created: 2022/01/09 13:12:22 by lnelson           #+#    #+#             */
+/*   Updated: 2022/01/09 23:00:23 by lnelson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(void *content)
+void	ft_tok_insert(t_tokenl *this, t_tokenl *inserted)
 {
-	t_env_str	*content2;
+	t_tokenl	*next;
 
-	content2 = (t_env_str *)content;
-	if (content2->env_display == 1)
-	{
-		if ((content2->value != NULL) && content2->value[0] != '\0')
-			printf("%s=%s\n", content2->name, content2->value);
-		else
-			printf("%s\n", content2->name);
-	}
-}
-
-void	builtin_env(t_list *lst_env)
-{
-	ft_lstiter(lst_env, print_env);
-	g_exit_status = 0;
+	next = this->next;
+	this->next = inserted;
+	inserted->next = next;
+	return ;
 }

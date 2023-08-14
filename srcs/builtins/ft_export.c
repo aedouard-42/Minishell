@@ -1,35 +1,20 @@
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnelson <lnelson@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 15:47:59 by lnelson           #+#    #+#             */
+/*   Updated: 2022/01/10 23:25:11 by lnelson          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	check_export_validity(char *str)
-{
-	int i;
-	int found_alpha;
-
-	i = 0;
-	found_alpha = 0;
-	if (!str || !str[0] || str[0] == '=')
-		return (-1);
-	while (str[i] && str[i] != '=')
-	{
-		if (ft_isalpha(str[i]) == 1)
-			found_alpha = 1;
-		else
-		{
-			if (ft_isdigit(str[i]) && !found_alpha)
-				return (-1);
-			else if (!ft_isdigit(str[i]) && str[i] != '_')
-				return (-1);
-		}
-		i++;
-	}
-	if (str[i] != '=')
-		return (0);
-	return (1);
-}
+#include "minishell.h"
 
 void	modify_var(t_list *list, char *name, char *value)
 {
-	t_env_str *content;
+	t_env_str	*content;
 
 	while (list)
 	{
@@ -38,30 +23,30 @@ void	modify_var(t_list *list, char *name, char *value)
 		{
 			free(content->value);
 			content->value = ft_strdup(value);
+			content->env_display = 1;
 			return ;
 		}
 		list = list->next;
 	}
 }
 
-void	add_name_and_value(t_list *list, char *name, char *value, int export_env)
+void	add_name_and_value(t_list *list, char *name, char *value, int _env)
 {
-	t_env_str *content;
-	t_list *lst;
+	t_env_str	*content;
+	t_list		*lst;
 
 	content = malloc(sizeof(t_env_str));
-
 	content->name = ft_strdup(name);
 	content->value = ft_strdup(value);
-	content->export = export_env;
+	content->env_display = _env;
 	lst = ft_lstnew(content);
 	ft_lstadd_back(&list, lst);
 }
 
-void	export_to_list(char *str, t_list *export_lst, t_list *env_lst, int export_env)
+void	export_to_list(char *str, t_list *env_lst, int export_env)
 {
-	char *name;
-	char *value;
+	char	*name;
+	char	*value;
 
 	name = NULL;
 	value = NULL;
@@ -73,26 +58,23 @@ void	export_to_list(char *str, t_list *export_lst, t_list *env_lst, int export_e
 			modify_var(env_lst, name, value);
 	}
 	else if (export_env)
-			add_name_and_value(env_lst, name, value, export_env);
-	if (ft_check_if_exists(export_lst, name))
-		modify_var(export_lst, name, value);
+		add_name_and_value(env_lst, name, value, export_env);
+	if (ft_check_if_exists(env_lst, name))
+		modify_var(env_lst, name, value);
 	else
-		add_name_and_value(export_lst, name, value, export_env);
+		add_name_and_value(env_lst, name, value, export_env);
 	free(name);
 	free(value);
 }
 
-void	builtin_export(t_list *export_lst, t_list *env_lst, char **strs)
+int	export_strs(char **strs, t_list *env_lst)
 {
-	int i;
-	int export_env;
+	int	i;
+	int	status;
+	int	export_env;
 
-	i = 0;
-	if (!strs || !strs[1])
-	{
-		ft_sort_export(export_lst);
-		builtin_env(export_lst);
-	}
+	i = 1;
+	status = 0;
 	while (strs[i])
 	{
 		export_env = check_export_validity(strs[i]);
@@ -101,10 +83,23 @@ void	builtin_export(t_list *export_lst, t_list *env_lst, char **strs)
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(strs[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
-			errno = 1;
+			status = 1;
 		}
-		export_to_list(strs[i], export_lst, env_lst, export_env);
+		else
+			export_to_list(strs[i], env_lst, export_env);
 		i++;
 	}
-	errno = 0;
+	return (status);
+}
+
+void	builtin_export(t_list *env_lst, char **strs)
+{
+	if (!strs || !strs[1])
+	{
+		ft_sort_export(env_lst);
+		ft_lstiter(env_lst, print_export);
+		g_exit_status = 0;
+		return ;
+	}
+	g_exit_status = export_strs(strs, env_lst);
 }

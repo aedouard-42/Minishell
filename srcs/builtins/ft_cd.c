@@ -1,67 +1,81 @@
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnelson <lnelson@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 15:47:50 by lnelson           #+#    #+#             */
+/*   Updated: 2022/01/10 15:51:32 by lnelson          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	change_path(char *path, t_list *lst_env, t_list *lst_export)
+#include "minishell.h"
+
+int	display_path_error(char *path)
 {
-	char *oldpwd;
-	char *newpwd;
-    char *tmp;
-	int ret;
+	ft_putstr_fd("\033[0;31mMinishell$ \033[0;37mcd: ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd(" No such file or directory\n", 2);
+	return (1);
+}
+
+int	change_path(char *path, t_list *lst_env)
+{
+	char	*oldpwd;
+	char	*newpwd;
+	char	*tmp;
+	int		ret;
 
 	tmp = getcwd(NULL, 0);
 	oldpwd = ft_strjoin("OLDPWD=", tmp);
-    free(tmp);
+	free(tmp);
 	ret = chdir(path);
 	if (ret == 0)
 	{
-		export_to_list(oldpwd, lst_export, lst_env, 1);
+		export_to_list(oldpwd, lst_env, 1);
 		tmp = getcwd(NULL, 0);
 		newpwd = ft_strjoin("PWD=", tmp);
-		export_to_list(newpwd, lst_export, lst_env, 1);
+		export_to_list(newpwd, lst_env, 1);
 		free(newpwd);
-        free(tmp);
+		free(tmp);
 	}
 	else if (ret == -1)
-		printf("cd error\n");
+		ret = display_path_error(path);
 	free(oldpwd);
 	return (ret);
 }
 
-int change_home(t_list *lst_env, t_list *lst_export, char **path)
+int	change_home(t_list *lst_env, char **path)
 {
-	int ret;
-
-	ret = -1;
 	if (!ft_check_if_exists(lst_env, "HOME"))
 	{
-		printf("home not set\n");
-		return (ret);
+		ft_putstr_fd("\033[0;31mMinishell$ \033[0;37mcd: HOME not set\n", 2);
+		return (1);
 	}
 	else
 	{
 		*path = ft_strdup(ft_search_value(lst_env, "HOME"));
-		ret = change_path(*path, lst_env, lst_export);
+		return (change_path(*path, lst_env));
 	}
-	return (ret);
 }
 
-void builtin_cd(char **args,  t_list *lst_env, t_list *lst_export)
+void	builtin_cd(char **args, t_list *lst_env)
 {
-    int ret;
-	char *path;
+	char	*path;
 
-	ret = -1;
 	path = NULL;
 	if (args && args[1] && args[2])
 	{
-		printf("too many args\n");
-		errno = -1; // handle this
+		ft_putstr_fd("\033[0;31mMinishell$ \033[0;37mcd: too many arguments\n", 2);
+		g_exit_status = 1;
 	}
 	if (!args || !args[1])
-		errno = change_home(lst_env, lst_export, &path);
-	else 
+		g_exit_status = change_home(lst_env, &path);
+	else
 	{
 		path = ft_strdup(args[1]);
-		errno = change_path(path, lst_env, lst_export);
+		g_exit_status = change_path(path, lst_env);
 	}
 	free(path);
 }
